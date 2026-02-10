@@ -1,0 +1,62 @@
+{% extends 'base.html'%}
+{% load static %}
+
+{% block head_css %}
+    <link rel="stylesheet" href="{% static 'css/kit_poro/kit.css' %}">
+{% endblock head_css %}
+
+
+{% block content %}
+
+
+ 
+
+<section class="page-title">
+    <h1>Acheter Votre Kit</h1>
+    <p>Choisissez le kit qui vous convient pour Poro Run</p>
+</section>
+<div id="storage-warning" class="hidden" role="alert" aria-live="polite"
+    style="max-width:800px;margin:12px auto;padding:10px;border-radius:6px;background:#fff3cd;color:#856404;display:none">
+    Votre navigateur bloque le stockage local (localStorage). Le panier peut ne pas fonctionner correctement.</div>
+<div class="conteneur">
+    {% if kits %}
+        {% for k in kits %}
+        <div class="box product" data-name="{{ k.name }}" data-price="{{ k.price }}">
+            {% if k.image %}
+                <img src="{{ k.image.url }}" alt="{{ k.name }}" onerror="this.onerror=null;this.src='https://via.placeholder.com/360x240?text=Kit'">
+            {% else %}
+                <img src="https://via.placeholder.com/360x240?text=Kit" alt="{{ k.name }}">
+            {% endif %}
+            <h2 class="product-title">{{ k.name }}</h2>
+            <p class="product-price">{{ k.price }} FCFA</p>
+            <ul class="kit-features">
+                {% for item in k.avantages %}
+                    <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+            <div class="quantity-row">
+                <button type="button" class="qty-btn" aria-label="Réduire quantité" onclick="changeQty('{{ k.name }}', -1)">−</button>
+                <input type="number" name="quantite_{{ k.id }}" id="quantite_{{ k.id }}" class="zone_text" value="1" min="0" data-item="{{ k.name }}">
+                <button type="button" class="qty-btn" aria-label="Augmenter quantité" onclick="changeQty('{{ k.name }}', 1)">+</button>
+            </div>
+            <button type="button" class="bouton" aria-label="Acheter {{ k.name }}" onclick="location.href='{% url 'confirmer_achat' %}'">ACHETER</button>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>Aucun kit disponible pour le moment.</p>
+    {% endif %}
+
+</div>
+<div class="box3 recap-below">
+    <h3>RECAPITULATIF</h3>
+    <div id="resume"></div>
+    <h4 id="total"></h4>
+    <div class="recap-actions">
+        <button class="bout" id="validerBtn" onclick="location.href='{% url 'confirmer_achat' %}'" aria-label="Valider les achats">VALIDER LES
+            ACHATS</button>
+        <button class="bout" id="viderPanierBtn" onclick="viderPanier()" aria-label="Vider le panier">VIDER LE
+            PANIER</button>
+    </div>
+</div>
+
+{% endblock content %}

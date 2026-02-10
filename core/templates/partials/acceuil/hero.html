@@ -1,0 +1,145 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block title %}
+Page d'accueil - Poro Run
+{% endblock title %}
+
+{% block head_css %}
+    <link rel="stylesheet" href="{% static 'css/acceuil/hero.css' %}">
+{% endblock head_css %}
+
+{% block content %} 
+
+        <!-- SECTION HERO -->
+        <section class="hero">
+            <div class="hero-text">
+                <h1>PORO<br>RUN</h1>
+                <h3>Festival</h3>
+                <p>L’événement sportif et culturel le plus attendu de Korhogo.</p>
+                <a href="{% url 'kits' %}" class="btn-primary">Acheter un kit</a>
+            </div>
+
+            <div class="hero-image">
+                <!-- Carrousel d'images pour la section HERO -->
+                <div class="hero-carousel" id="hero-carousel">
+                    {% if hero_image %}
+                        {% for img in hero_image %}
+                            <img src="{{ img.image.url }}" alt="{{ img.alt_text }}">
+                        {% endfor %}
+                    {% else %}
+                        <img src="{% static 'Images/1.jpg' %}" alt="Image de coureurs">
+                        <img src="{% static 'Images/2.jpg' %}" alt="Image de coureurs 2">
+                        <img src="{% static 'Images/3.jpg' %}" alt="Image de coureurs 3">
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTIONS -->
+        <section class="section">
+            <h2>Activités au programme</h2>
+                <div class="atouts">
+                    <div class="atout">
+                    <h3>Ambiance</h3>
+                    <p>Joie et danse</p>
+                </div>
+                <div class="atout">
+                    <h3>Endurance</h3>
+                    <p>Sport</p>
+                </div>
+                <div class="atout">
+                    <h3><h3>Rencontre et<br> fun</h3></h3>
+                    <p>Rencontre de tous genres</p>
+                </div>
+            </div>   
+        </section>
+
+        <section class="section dark">
+            <h2>Découvrez l'ambiance</h2>
+            <div class="atouts">
+                <div class="atout-image">
+                    <img src="{% static 'Images/2.jpg' %}" alt="Image">
+                </div>
+                <div class="atout-image">
+                    <img src="{% static 'Images/3.jpg' %}" alt="Image">
+                </div>
+                <div class="atout-image">
+                    <img src="{% static 'Images/4.jpg' %}" alt="Image">
+                </div>
+            </div>  
+        </section>
+
+        <section class="foot-kit">
+            <!-- Carrousel d'images pour les kits -->
+                <div class="kit-image">
+                <div class="kit-carousel" id="kit-carousel">
+                    <img src="{% static 'Images/kit 1.jpg' %}" alt="kits poro">
+                    <img src="{% static 'Images/kit 2.jpg' %}" alt="kits poro">
+                </div>
+                <!-- Contrôles si besoin -->
+                <button class="kit-prev" aria-label="Image précédente">‹</button>
+                <button class="kit-next" aria-label="Image suivante">›</button>
+            </div>
+            <div class="kit-right">
+                <a href="{% url 'kits' %}" class="btn-kit">Voir les kits</a>
+            </div>
+        </section>
+
+    <!-- Tickets déplacés vers une page dédiée 'tickets.html' -->
+
+    <!-- Sponsors déplacés plus bas sous la section Lieu/GPS -->
+
+    <!-- ========== SECTION LIEU / GPS ========== -->
+    <section id="location" class="section dark">
+        <h2>Lieu & Itinéraire</h2>
+        <p class="subtitle">Retrouvez le lieu du festival et ouvrez l'itinéraire depuis votre position.</p>
+        <div class="event-schedule">
+            <p class="event-date"><strong>Date :</strong> 12 décembre 2025</p>
+            <p class="event-hours"><strong>Horaires :</strong> 08:00 — 22:00</p>
+        </div>
+        <div class="map-container">
+            <iframe src="https://www.google.com/maps?q=9.4647,-5.6319&z=15&output=embed" aria-label="Carte du lieu du festival" loading="lazy"></iframe>
+        </div>
+        <div class="map-actions">
+            <button id="open-directions" class="btn-buy">Itinéraire (Google Maps)</button>
+            <button id="use-my-location" class="btn-buy">Utiliser ma position</button>
+        </div>
+    </section>
+
+    <!-- ========== SECTION SPONSORS/PARTENAIRES ========== -->
+    <section id="sponsors" class="section dark">
+        <h2>Nos Partenaires</h2>
+        <p class="subtitle">Merci à nos sponsors qui rendent Poro Run possible.</p>
+        <div class="sponsors-grid">
+        {% for part in partenaire %}
+            <div class="sponsor-card">
+                 <!-- logo centré et adaptatif -->
+                 <div class="logo-Partenare">
+                 {% if part.logo %}
+                     <img class="sponsor-logo" src="{{ part.logo.url }}" alt="{{ part.name }} logo">
+                 {% else %}
+                     <span class="logo-placeholder">{{ part.name }}</span>
+                 {% endif %}
+                 </div>
+                <div class="sponsor-name">{{ part.name }}</div>
+                <p class="sponsor-level">{{ part.level }}</p>
+            </div>
+             {% endfor %}
+                <!--
+
+            <div class="sponsor-card">
+                <div class="sponsor-placeholder">Sponsor 2</div>
+                <p>Partenaire argent</p>
+            </div>
+            <div class="sponsor-card">
+                <div class="sponsor-placeholder">Sponsor 3</div>
+                <p>Partenaire bronze</p>
+            </div>
+            <div class="sponsor-card">
+                <div class="sponsor-placeholder">Sponsor 4</div>
+                <p>Partenaire</p>
+            </div>
+            -->
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block head_css %}
+<link rel="stylesheet" href="{% static 'css/achat/confirmer_achat.css' %}">
+{% endblock head_css %}
+{% block content %}
+<!-- page acceuil -->
+ 
+
+<section class="page-title">
+    <h1>Confirmer le Paiement</h1>
+    <p>Complétez votre achat avec Mobile Money</p>
+</section>
+
+<div class="payment-container">
+    <div class="summary">
+        <p>Montant à Payer :</p>
+        <p class="amount" id="amount-display"> XOF</p>
+        <!-- hidden field to store numeric total if needed -->
+        <input type="hidden" id="cart-total-hidden" name="cart-total-hidden" value="0">
+        <!-- Liste détaillée du panier -->
+        <div id="cart-items" style="margin-top:12px;text-align:left"></div>
+
+        <!-- Formulaire POST : lieu de retrait + numéro -->
+        <form method="post" action="{% url 'confirmer_achat' %}" id="payment-submission">
+            {% csrf_token %}
+            <div class="pickup-location">
+                <label for="lieu-retrait">📍 Lieu de retrait du kit :</label>
+                <select id="lieu-retrait" name="lieu-retrait" required>
+                    <option value="">-- Sélectionnez un lieu --</option>
+                    {% for lieu in lieux %}
+                        <option value="{{ lieu.id }}">{{ lieu.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+        
+    </div>
+
+    <p class="instruction"> Choisissez votre réseau :</p>
+
+    <div class="network-selection">
+        <button class="network-button" data-network="orange" title="Orange Money">
+            <svg viewBox="0 0 100 50" width="80" height="40">
+                <rect width="100" height="50" fill="#FF6600" rx="4" />
+                <text x="50" y="32" font-size="14" font-weight="bold" fill="white" text-anchor="middle"
+                    font-family="Arial">Orange</text>
+            </svg>
+        </button>
+
+        <button class="network-button" data-network="mtn" title="MTN Mobile Money">
+            <svg viewBox="0 0 100 50" width="80" height="40">
+                <rect width="100" height="50" fill="#FFCC00" rx="4" />
+                <text x="50" y="32" font-size="12" font-weight="bold" fill="#333333" text-anchor="middle"
+                    font-family="Arial">MTN</text>
+            </svg>
+        </button>
+
+        <button class="network-button" data-network="moov" title="Moov Money">
+            <svg viewBox="0 0 100 50" width="80" height="40">
+                <rect width="100" height="50" fill="#00AA44" rx="4" />
+                <text x="50" y="32" font-size="14" font-weight="bold" fill="white" text-anchor="middle"
+                    font-family="Arial">Moov</text>
+            </svg>
+        </button>
+
+        <button class="network-button" data-network="wave" title="Wave">
+            <svg viewBox="0 0 100 50" width="80" height="40">
+                <rect width="100" height="50" fill="#0066FF" rx="4" />
+                <text x="50" y="32" font-size="14" font-weight="bold" fill="white" text-anchor="middle"
+                    font-family="Arial">Wave</text>
+            </svg>
+        </button>
+        <a href="{% url 'recap' %}" class="btn-retour">confirmer</a>
+    </div>
+
+    <div class="payment-form hidden" id="payment-details-form">
+        <p class="instruction"> continuer</p>
+            <div class="form-group">
+                <label for="phone-number" id="network-label">Numéro de Téléphone (<span
+                        id="selected-network-name">Réseau</span>)</label>
+                <input type="tel" id="phone-number" name="phone-number" placeholder="+225 0X XX XX XX" required>
+            </div>
+
+            <button type="submit" class="submit-button">continuer</button>
+
+            <p class="note"><strong>Vous devrez confirmer la transaction avec votre code PIN sur votre
+                    téléphone</strong></p>
+    </div>
+
+    </form>
+
+    <div class="processing-message hidden" id="processing-message">
+        <div class="loader"></div>
+        <p>Traitement de votre paiement... Veuillez confirmer la transaction sur votre téléphone.</p>
+    </div>
+
+    <div class="result-message hidden" id="result-message"></div>
+</div>
+
+{% endblock %}

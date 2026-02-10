@@ -1,0 +1,42 @@
+{% extends 'base.html'%}
+{% load static %}
+
+{% block head_css %}
+    <link rel="stylesheet" href="{% static 'css/message/recapt.css' %}">
+{% endblock head_css %}
+
+{% block content %}
+
+
+            <div class="confirmation-card">
+                <div class="success-icon">✓</div>
+                <div>
+                    <h1>Paiement réussi !</h1>
+                    <p>Merci pour votre achat de <strong id="kit-names">Kit Poro Run</strong></p>
+                </div>
+                <div class="order-details">
+                    <div id="kits-list"></div>
+                    <div class="detail-row">
+                        <span class="label">Montant payé :</span>
+                        <span class="value" id="montant-paye">0 FCFA</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Référence :</span>
+                        <span class="value" id="reference">REF-000000000</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Date d'achat :</span>
+                        <span class="value" id="date-achat">--</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Date de livraison estimée :</span>
+                        <span class="value" id="date-livraison">--</span>
+                    </div>
+                </div>
+
+                <div class="buttons-container">
+                    <a href="{% url 'home' %}"><button class="btn-primary">Retour à l'accueil</button></a>
+                    <a href="{% url 'kits' %}"><button class="btn-secondary">Acheter d'autres kits</button></a>
+                </div>
+            </div>
+{% endblock content %}

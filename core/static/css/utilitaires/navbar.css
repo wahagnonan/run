@@ -1,0 +1,116 @@
+
+:root{
+    /* Palette festive: orange chaud + rose + violet */
+    --bg-dark: #0a0a23;
+    --accent: #ff7d00; /* orange */
+    --accent-2: #ff4da6; /* rose vif */
+    --accent-3: #7b4cff; /* violet */
+    --muted: #6b7280;
+    --card-bg: rgba(255,255,255,0.04);
+}
+
+/* ========== HEADER / NAVBAR ========== */
+.navbar {
+    width: 100%;
+    padding: 15px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px; /* espace entre éléments du header */
+    background: linear-gradient(90deg,var(--bg-dark) 0%, #07102a 100%);
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+/* Transition + état transparent lors du scroll */
+.navbar{
+    transition: background 0.28s ease, box-shadow 0.28s ease, padding 0.28s ease;
+}
+.navbar.transparent{
+    /* Semi-transparent + blur for better contrast over images */
+    background: rgba(10,10,30,0.36) !important;
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 6px 18px rgba(3,8,20,0.28);
+    padding: 10px 24px;
+}
+.navbar.transparent .logo,
+.navbar.transparent nav ul li a,
+.navbar.transparent .btn-inscription{
+    color: #fff;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 20px;
+    align-items: center;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    transition: 0.3s;
+    padding: 8px 10px; /* meilleure cible tactile / lisibilité */
+}
+
+nav ul li a:hover {
+    color: #ff7d00;
+}
+
+.btn-inscription {
+    background: linear-gradient(90deg,var(--accent), var(--accent-2));
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.btn-inscription:hover {
+    background-color: #d66a00;
+}
+
+/* ========== MENU HAMBURGER (MOBILE) ========== */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    width: 28px;
+    cursor: pointer;
+    gap: 6px;
+}
+
+/* Donner de l'espace au bouton d'inscription par rapport à la nav */
+.btn-inscription {
+    margin-left: 16px;
+}
+
+.hamburger span {
+    height: 3px;
+    width: 100%;
+    background: white;
+    border-radius: 3px;
+    transition: 0.3s;
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+}
