@@ -103,6 +103,12 @@
     position: absolute;
 }
 
+/* Afficher la première image si aucune n'a la classe "active" */
+.hero-carousel img:first-child{
+    opacity: 1;
+    position: relative;
+}
+
 /* Controls (prev/next) et pagination pour le hero */
 .hero-prev, .hero-next{
     position: absolute;
@@ -505,6 +511,12 @@
     top: 0;
 }
 .kit-carousel img.active{
+    opacity: 1;
+    position: relative;
+}
+
+/* Afficher la première image si aucune n'a la classe "active" */
+.kit-carousel img:first-child{
     opacity: 1;
     position: relative;
 }
