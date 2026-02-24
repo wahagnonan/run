@@ -1,20 +1,27 @@
-from django.shortcuts import render, get_object_or_404,redirect
-from .models import Partenaire, Kit,Activite, Commande, Edition, LieuRetrait
-# Create your views here.
-
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views.decorators.cache import cache_page
+from .models import Partenaire, Kit, Activite, Commande, Edition, LieuRetrait
 
 
 def get_active_edition():
-    return Edition.objects.filter(is_active=True).first()
+    return (
+        Edition.objects
+        .filter(is_active=True)
+        .prefetch_related('hero_images', 'activite', 'partenaire', 'kit')
+        .first()
+    )
 
+
+@cache_page(60 * 5)  # cache la page d'accueil 5 minutes
 def home(request):
     edition = get_active_edition()
-    return render(request, 'partials/acceuil/hero.html',{
+    return render(request, 'partials/acceuil/hero.html', {
         'edition': edition,
         'hero_image': edition.hero_images.all() if edition else [],
         'activities': edition.activite.all() if edition else [],
         'partenaire': edition.partenaire.all() if edition else [],
     })
+
 
 def kit_view(request):
     edition = get_active_edition()
@@ -24,11 +31,10 @@ def kit_view(request):
 
 def confirmer_achat(request):
     edition = get_active_edition()
-    # ensure some default pickup locations exist
     DEFAULT_LIEUX = [
-        'Korhogo Centre - Place de la Paix','Korhogo - Quartier Sinistré','Korhogo - Soba',
-        'Korhogo - DEM','Korhogo - Haoussabougou','Korhogo - Cocody',
-        'Ferkessédougou - Centre ville','Boundiali - Centre ville'
+        'Korhogo Centre - Place de la Paix', 'Korhogo - Quartier Sinistré', 'Korhogo - Soba',
+        'Korhogo - DEM', 'Korhogo - Haoussabougou', 'Korhogo - Cocody',
+        'Ferkessédougou - Centre ville', 'Boundiali - Centre ville'
     ]
     lieux = LieuRetrait.objects.all()
     if not lieux.exists():
@@ -45,8 +51,7 @@ def confirmer_achat(request):
                 lieu = LieuRetrait.objects.get(pk=lieu_id)
             except LieuRetrait.DoesNotExist:
                 lieu = None
-        commande = Commande.objects.create(numero=numero, lieuRetrait=lieu)
-        # after creating commande, redirect to recap or show a message
+        Commande.objects.create(numero=numero, lieuRetrait=lieu)
         return redirect('recap')
 
     return render(request, 'partials/achat/confirmer_achat.html', {
@@ -57,3 +62,4 @@ def confirmer_achat(request):
 
 def recap(request):
     return render(request, 'partials/message/recapt.html')
+

@@ -65,16 +65,19 @@
     }
 
     .qty-btn {
-        background: #f6f6f6;
-        border: 1px solid #ddd;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: #fff;
         padding: 6px 10px;
         border-radius: 6px;
         cursor: pointer;
         font-size: 18px;
+        transition: background 0.2s;
     }
 
     .qty-btn:hover {
-        background: #eee;
+        background: rgba(255, 125, 0, 0.2);
+        border-color: var(--accent);
     }
 
     .box1,
@@ -135,7 +138,8 @@
     .product-price {
         font-weight: 700;
         margin: 6px 0;
-        color: #c45500;
+        color: var(--accent-2);
+        /* rose vif, lisible sur fond sombre */
     }
 
     .bout:disabled,
@@ -265,11 +269,12 @@
         margin: 10px;
     }
 
-    form {
-        font-size: 20px;
-        text-decoration: underline;
-        text-align: center;
-
+    /* Scoped: prevent global form decoration */
+    .conteneur form,
+    .box3 form {
+        font-size: inherit;
+        text-decoration: none;
+        text-align: left;
     }
 
     /* ========== BADGE PANIER & LISTES ========== */
@@ -377,110 +382,7 @@
         }
     }
 
-    /* ========== BADGE PANIER & LISTES ========== */
-    .cart-badge {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        background: linear-gradient(135deg, var(--accent), var(--accent-2));
-        color: white;
-        padding: 8px 12px;
-        border-radius: 20px;
-        font-weight: 600;
-        font-size: 14px;
-        box-shadow: 0 4px 12px rgba(255, 77, 166, 0.3);
-        animation: pulse 2s infinite;
-    }
 
-    @keyframes pulse {
-
-        0%,
-        100% {
-            transform: scale(1);
-        }
-
-        50% {
-            transform: scale(1.05);
-        }
-    }
-
-    .kit-features {
-        list-style: none;
-        padding: 0 0 0 0;
-        margin: 10px 0;
-    }
-
-    .kit-features li {
-        padding: 6px 0 6px 24px;
-        position: relative;
-        font-size: 14px;
-        line-height: 1.5;
-        color: rgba(255, 255, 255, 0.95);
-    }
-
-    .kit-features li::before {
-        content: "✓";
-        position: absolute;
-        left: 0;
-        color: var(--accent);
-        font-weight: 700;
-    }
-
-    .badge-populaire {
-        display: inline-block;
-        background: linear-gradient(135deg, var(--accent), var(--accent-2));
-        color: white;
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 600;
-        margin: 8px 0;
-    }
-
-    /* ========== RESPONSIVE ========== */
-
-    /* Tablettes et petits écrans (800px à 1024px) */
-    @media screen and (max-width: 1024px) {
-        .navbar {
-            padding: 12px 30px;
-        }
-
-        .cart-badge {
-            padding: 6px 10px;
-            font-size: 12px;
-        }
-
-        .logo {
-            font-size: 20px;
-        }
-
-        nav ul {
-            gap: 16px;
-        }
-
-        nav ul li a {
-            font-size: 14px;
-        }
-
-        .page-title h1 {
-            font-size: 36px;
-        }
-
-        .page-title p {
-            font-size: 16px;
-        }
-
-        .conteneur {
-            padding: 10px;
-            gap: 16px;
-        }
-
-        .box1,
-        .box2,
-        .box3 {
-            max-width: 380px;
-        }
-    }
 
     /* Tablettes et appareils moyens (max 800px) */
     @media screen and (max-width: 800px) {

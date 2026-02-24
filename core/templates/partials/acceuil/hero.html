@@ -24,12 +24,12 @@ Page d'accueil - Poro Run
                 <div class="hero-carousel" id="hero-carousel">
                     {% if hero_image %}
                         {% for img in hero_image %}
-                            <img src="{{ img.image.url }}" alt="{{ img.alt_text }}">
+                            <img src="{{ img.image.url }}" alt="{{ img.alt_text }}" {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}>
                         {% endfor %}
                     {% else %}
-                        <img src="{% static 'Images/1.jpg' %}" alt="Image de coureurs">
-                        <img src="{% static 'Images/2.jpg' %}" alt="Image de coureurs 2">
-                        <img src="{% static 'Images/3.jpg' %}" alt="Image de coureurs 3">
+                        <img src="{% static 'Images/1.jpg' %}" alt="Image de coureurs" fetchpriority="high">
+                        <img src="{% static 'Images/2.jpg' %}" alt="Image de coureurs 2" loading="lazy">
+                        <img src="{% static 'Images/3.jpg' %}" alt="Image de coureurs 3" loading="lazy">
                     {% endif %}
                 </div>
             </div>
@@ -58,13 +58,13 @@ Page d'accueil - Poro Run
             <h2>Découvrez l'ambiance</h2>
             <div class="atouts">
                 <div class="atout-image">
-                    <img src="{% static 'Images/2.jpg' %}" alt="Image">
+                    <img src="{% static 'Images/2.jpg' %}" alt="Image" loading="lazy">
                 </div>
                 <div class="atout-image">
-                    <img src="{% static 'Images/3.jpg' %}" alt="Image">
+                    <img src="{% static 'Images/3.jpg' %}" alt="Image" loading="lazy">
                 </div>
                 <div class="atout-image">
-                    <img src="{% static 'Images/4.jpg' %}" alt="Image">
+                    <img src="{% static 'Images/4.jpg' %}" alt="Image" loading="lazy">
                 </div>
             </div>  
         </section>

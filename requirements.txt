@@ -3,3 +3,4 @@ Django==6.0.1
 sqlparse==0.5.5
 tzdata==2025.3
 Pillow==11.1.0
+# whitenoise==6.9.0  # à installer quand l'accès réseau est disponible : pip install whitenoise

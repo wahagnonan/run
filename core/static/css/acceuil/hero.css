@@ -1,13 +1,15 @@
-
 /* Variables de thème */
-:root{
+:root {
     /* Palette festive: orange chaud + rose + violet */
     --bg-dark: #0a0a23;
-    --accent: #ff7d00; /* orange */
-    --accent-2: #ff4da6; /* rose vif */
-    --accent-3: #7b4cff; /* violet */
+    --accent: #ff7d00;
+    /* orange */
+    --accent-2: #ff4da6;
+    /* rose vif */
+    --accent-3: #7b4cff;
+    /* violet */
     --muted: #6b7280;
-    --card-bg: rgba(255,255,255,0.04);
+    --card-bg: rgba(255, 255, 255, 0.04);
 }
 
 
@@ -15,7 +17,8 @@
 /* ========== SECTION HERO ========== */
 .hero {
     display: flex;
-    justify-content: space-between; /* texte à gauche, image à droite */
+    justify-content: space-between;
+    /* texte à gauche, image à droite */
     align-items: center;
     padding: 60px 24px;
     gap: 40px;
@@ -27,10 +30,12 @@
     width: 50%;
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* aligner le texte à gauche sur desktop */
+    align-items: flex-start;
+    /* aligner le texte à gauche sur desktop */
     text-align: left;
     max-width: 350px;
 }
+
 .hero-text h1 {
     font-size: 48px;
     line-height: 1.05;
@@ -38,33 +43,40 @@
     font-weight: 700;
     letter-spacing: 1px;
 }
+
 .hero-text h3 {
     font-size: 20px;
-    color: #555;
+    color: rgba(255, 255, 255, 0.75);
 }
 
 .hero-text p {
     font-size: 18px;
     margin-bottom: 20px;
-    color: #333;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .btn-primary {
-    margin-top: 8px; /* espace entre le texte et le CTA */
+    margin-top: 8px;
+    /* espace entre le texte et le CTA */
 }
 
 .btn-primary {
-    background: linear-gradient(90deg,var(--accent-2), var(--accent-3));
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
     color: white;
     padding: 12px 25px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
+    font-weight: 600;
     transition: 0.3s;
+    display: inline-block;
+    text-decoration: none;
 }
 
 .btn-primary:hover {
-    background: #005fcc;
+    filter: brightness(1.12);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 125, 0, 0.3);
 }
 
 .hero-image {
@@ -72,6 +84,7 @@
     display: flex;
     justify-content: center;
 }
+
 .hero-image img {
     width: 100%;
     max-width: 520px;
@@ -80,15 +93,18 @@
 }
 
 /* --- Carrousel pour la section HERO (images passantes) --- */
-.hero-carousel{
+.hero-carousel {
     position: relative;
     overflow: hidden;
     width: 100%;
-    max-width: 520px; /* correspond à l'image max utilisée précédemment */
-    height: 320px; /* hauteur fixe pour conserver le layout; ajustable selon images */
+    max-width: 520px;
+    /* correspond à l'image max utilisée précédemment */
+    height: 320px;
+    /* hauteur fixe pour conserver le layout; ajustable selon images */
     border-radius: 10px;
 }
-.hero-carousel img{
+
+.hero-carousel img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -98,23 +114,25 @@
     opacity: 0;
     transition: opacity 0.6s ease;
 }
-.hero-carousel img.active{
+
+.hero-carousel img.active {
     opacity: 1;
     position: absolute;
 }
 
 /* Afficher la première image si aucune n'a la classe "active" */
-.hero-carousel img:first-child{
+.hero-carousel img:first-child {
     opacity: 1;
     position: relative;
 }
 
 /* Controls (prev/next) et pagination pour le hero */
-.hero-prev, .hero-next{
+.hero-prev,
+.hero-next {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(0,0,0,0.35);
+    background: rgba(0, 0, 0, 0.35);
     color: white;
     border: none;
     width: 40px;
@@ -125,10 +143,16 @@
     justify-content: center;
     cursor: pointer;
 }
-.hero-prev{ left: 8px; }
-.hero-next{ right: 8px; }
 
-.hero-pagination{
+.hero-prev {
+    left: 8px;
+}
+
+.hero-next {
+    right: 8px;
+}
+
+.hero-pagination {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
@@ -136,29 +160,42 @@
     display: flex;
     gap: 8px;
 }
-.hero-pagination button{
+
+.hero-pagination button {
     width: 10px;
     height: 10px;
     border-radius: 50%;
     border: none;
-    background: rgba(255,255,255,0.45);
+    background: rgba(255, 255, 255, 0.45);
     cursor: pointer;
 }
-.hero-pagination button.active{ background: white; }
+
+.hero-pagination button.active {
+    background: white;
+}
 
 /* Animation pulse pour le bouton Voir les kits */
-.btn-kit{
+.btn-kit {
     animation: pulse 2.2s infinite ease-in-out;
 }
-@keyframes pulse{
-    0%{ transform: scale(1); }
-    50%{ transform: scale(1.03); }
-    100%{ transform: scale(1); }
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.03);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 /* Responsive: réduire la hauteur du carrousel sur petits écrans */
 @media screen and (max-width: 600px) {
-    .hero-carousel{
+    .hero-carousel {
         height: 220px;
         max-width: 100%;
     }
@@ -173,16 +210,19 @@
 .section.dark {
     /* enlever le fond clair pour laisser le background global (même couleur que les autres sections) */
     background: transparent;
-    color: #ffffff; /* texte clair pour lisibilité sur le fond sombre */
+    color: #ffffff;
+    /* texte clair pour lisibilité sur le fond sombre */
 }
 
 .section h2 {
     font-size: 28px;
     margin-bottom: 15px;
 }
-.section.dark h2{
+
+.section.dark h2 {
     color: #fff;
 }
+
 .atouts {
     display: flex;
     justify-content: space-between;
@@ -190,25 +230,36 @@
     margin-top: 30px;
     gap: 20px;
 }
-.atout{
-    width: 22%; 
+
+.atout {
+    width: 22%;
 }
-.atout h3{
+
+.atout h3 {
     font-size: 22px;
     margin-bottom: 10px;
-    color: #0a0a23;
+    color: #fff;
+    /* blanc par défaut — fond toujours sombre */
 }
-.atout p{
+
+.atout p {
     font-size: 15px;
-    color: #444;
+    color: rgba(255, 255, 255, 0.85);
 }
 
 /* couleurs adaptées quand la section est dark (fond sombre) */
-.section.dark .atout h3{ color: #fff; }
-.section.dark .atout p{ color: rgba(255,255,255,0.85); }
+.section.dark .atout h3 {
+    color: #fff;
+}
+
+.section.dark .atout p {
+    color: rgba(255, 255, 255, 0.85);
+}
+
 .atout-image {
     width: 50%;
 }
+
 .atout-image img {
     width: 100%;
     background: #005fcc;
@@ -216,78 +267,134 @@
 }
 
 /* Petits effets et ombres pour les cartes */
-.atout, .atout-image, .hero-image, .kit-image {
+.atout,
+.atout-image,
+.hero-image,
+.kit-image {
     background: var(--card-bg);
     padding: 8px;
     border-radius: 12px;
 }
 
 /* Légère animation d'apparition pour le hero */
-.hero-text{
+.hero-text {
     animation: fadeInUp 0.6s ease both;
 }
-@keyframes fadeInUp{
-    from{ transform: translateY(8px); opacity: 0; }
-    to{ transform: translateY(0); opacity: 1; }
+
+@keyframes fadeInUp {
+    from {
+        transform: translateY(8px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 /* Boutons: focus + hover */
-.btn-primary:focus, .btn-kit:focus, .btn-inscription:focus {
-    outline: 3px solid rgba(255,125,0,0.18);
+.btn-primary:focus,
+.btn-kit:focus,
+.btn-inscription:focus {
+    outline: 3px solid rgba(255, 125, 0, 0.18);
     outline-offset: 3px;
 }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(3,41,86,0.12); }
-.btn-kit:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(3,41,86,0.12); }
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(3, 41, 86, 0.12);
+}
+
+.btn-kit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(3, 41, 86, 0.12);
+}
 
 /* Petite barre décorative sous le h1 */
-.hero-text h1::after{
+.hero-text h1::after {
     content: '';
     display: block;
     width: 64px;
     height: 6px;
     margin-top: 12px;
     border-radius: 6px;
-    background: linear-gradient(90deg,var(--accent), var(--accent-2));
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
 }
 
 /* ========== TICKETS SECTION ========== */
-.subtitle{ font-size:16px; color:rgba(255,255,255,0.85); margin-bottom:20px; }
-.tickets-grid{
+.subtitle {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 20px;
+}
+
+.tickets-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
     max-width: 1000px;
     margin: 30px auto;
 }
-.ticket-card{
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,125,0,0.15);
+
+.ticket-card {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 125, 0, 0.15);
     border-radius: 12px;
     padding: 24px;
     text-align: center;
     position: relative;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.ticket-card:hover{ transform: translateY(-6px); box-shadow: 0 12px 24px rgba(123,76,255,0.15); }
-.ticket-card.featured{ border-color: var(--accent); }
-.badge{
+
+.ticket-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(123, 76, 255, 0.15);
+}
+
+.ticket-card.featured {
+    border-color: var(--accent);
+}
+
+.badge {
     position: absolute;
     top: -12px;
     left: 50%;
     transform: translateX(-50%);
-    background: linear-gradient(90deg,var(--accent), var(--accent-2));
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
     padding: 4px 12px;
     border-radius: 20px;
     font-size: 12px;
     font-weight: 600;
     color: white;
 }
-.ticket-card h3{ font-size:20px; margin-bottom:8px; }
-.ticket-card .price{ font-size:24px; font-weight:700; color:var(--accent-2); margin-bottom:16px; }
-.ticket-features{ list-style:none; text-align:left; margin-bottom:16px; }
-.ticket-features li{ padding:6px 0; font-size:14px; color:rgba(255,255,255,0.8); }
-.btn-buy{
-    background: linear-gradient(90deg,var(--accent), var(--accent-2));
+
+.ticket-card h3 {
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+.ticket-card .price {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--accent-2);
+    margin-bottom: 16px;
+}
+
+.ticket-features {
+    list-style: none;
+    text-align: left;
+    margin-bottom: 16px;
+}
+
+.ticket-features li {
+    padding: 6px 0;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.btn-buy {
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
     color: white;
     padding: 10px 24px;
     border: none;
@@ -295,109 +402,138 @@
     cursor: pointer;
     transition: 0.3s;
 }
-.btn-buy:hover{ transform: scale(1.05); }
+
+.btn-buy:hover {
+    transform: scale(1.05);
+}
 
 /* ========== SPONSORS SECTION ========== */
-.sponsors-grid{
+.sponsors-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 20px;
     max-width: 1000px;
     margin: 30px auto;
 }
-.sponsor-card{
-    background: rgba(255,255,255,0.08);
+
+.sponsor-card {
+    background: rgba(255, 255, 255, 0.08);
     border-radius: 12px;
-    padding: 20px;
+    padding: 24px 20px;
     text-align: center;
     transition: transform 0.3s ease;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 8px;
+    min-height: 240px;
+    /* hauteur minimum uniforme */
 }
-.sponsor-card:hover{ transform: scale(1.04); }
-.sponsor-placeholder{
+
+.sponsor-card:hover {
+    transform: scale(1.04);
+}
+
+.sponsor-placeholder {
     width: 120px;
     height: 80px;
-    background: linear-gradient(135deg, rgba(255,125,0,0.2), rgba(123,76,255,0.2));
+    background: linear-gradient(135deg, rgba(255, 125, 0, 0.2), rgba(123, 76, 255, 0.2));
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 auto 12px;
     font-size: 14px;
-    color: rgba(255,255,255,0.6);
+    color: rgba(255, 255, 255, 0.6);
 }
-.sponsor-card p{ font-size:13px; color:rgba(255,255,255,0.75); }
 
-/* Logo container and responsive image fit */
-.logo-Partenare{
+.sponsor-card p {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+/* Logo container — dimensions fixes pour uniformiser tous les logos/photos */
+.logo-Partenare {
     width: 140px;
     height: 140px;
     margin: 0 auto 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, rgba(255,125,0,0.06), rgba(123,76,255,0.06));
+    background: rgba(255, 255, 255, 0.06);
     border-radius: 12px;
-    padding: 12px; /* espace autour du logo */
-    box-shadow: 0 8px 20px rgba(3,41,86,0.06) inset;
+    padding: 14px;
+    overflow: hidden;
+    /* empêche tout débordement */
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12) inset;
+    flex-shrink: 0;
+    /* ne pas rétrécir dans le flex parent */
 }
-.logo-Partenare img{
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
+
+.logo-Partenare img {
+    width: 100%;
+    height: 100%;
     object-fit: contain;
+    /* garde le ratio, pas de déformation */
     display: block;
-    /* ensure logos don't fill the entire square and keep consistent padding */
-    max-width: 84%;
-    max-height: 84%;
+    border-radius: 6px;
 }
 
 /* Sponsor name and level styling */
-.sponsor-name{
+.sponsor-name {
     font-weight: 700;
-    color: rgba(255,255,255,0.95);
+    color: rgba(255, 255, 255, 0.95);
     font-size: 15px;
     text-align: center;
 }
-.sponsor-level{
+
+.sponsor-level {
     margin: 0;
     font-size: 13px;
-    color: rgba(255,255,255,0.75);
+    color: rgba(255, 255, 255, 0.75);
 }
 
 /* Smaller sizes on narrow screens */
 @media screen and (max-width: 600px) {
-    .logo-Partenare{ width: 100px; height: 100px; padding: 8px; }
-    .sponsor-placeholder{ width:100px; height:60px; }
+    .logo-Partenare {
+        width: 100px;
+        height: 100px;
+        padding: 8px;
+    }
+
+    .sponsor-placeholder {
+        width: 100px;
+        height: 60px;
+    }
 }
 
 /* Explicit fixed-size sponsor image class (centered) */
-.sponsor-logo{
+.sponsor-logo {
     width: 100px;
     height: 100px;
     display: block;
-    margin: 0 auto; /* center horizontally */
+    margin: 0 auto;
+    /* center horizontally */
     object-fit: contain;
 }
 
-@media screen and (max-width: 600px){
-    .sponsor-logo{ width: 80px; height: 80px; }
+@media screen and (max-width: 600px) {
+    .sponsor-logo {
+        width: 80px;
+        height: 80px;
+    }
 }
 
 /* ========== SCROLL TO TOP BUTTON ========== */
-#scroll-top{
+#scroll-top {
     position: fixed;
     bottom: 30px;
     right: 30px;
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    background: linear-gradient(135deg,var(--accent-2), var(--accent-3));
+    background: linear-gradient(135deg, var(--accent-2), var(--accent-3));
     color: white;
     border: none;
     cursor: pointer;
@@ -405,21 +541,41 @@
     align-items: center;
     justify-content: center;
     font-size: 20px;
-    box-shadow: 0 8px 20px rgba(123,76,255,0.25);
+    box-shadow: 0 8px 20px rgba(123, 76, 255, 0.25);
     z-index: 100;
     transition: all 0.3s ease;
 }
-#scroll-top:hover{ transform: translateY(-4px); box-shadow: 0 12px 28px rgba(123,76,255,0.35); }
 
-@media screen and (max-width: 600px){
-    .ticket-card{ padding:16px; }
-    .sponsor-placeholder{ width:100px; height:60px; }
-    #scroll-top{ width:44px; height:44px; bottom:20px; right:20px; font-size:18px; }
+#scroll-top:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(123, 76, 255, 0.35);
 }
+
+@media screen and (max-width: 600px) {
+    .ticket-card {
+        padding: 16px;
+    }
+
+    .sponsor-placeholder {
+        width: 100px;
+        height: 60px;
+    }
+
+    #scroll-top {
+        width: 44px;
+        height: 44px;
+        bottom: 20px;
+        right: 20px;
+        font-size: 18px;
+    }
+}
+
 /* ========== FOOTER ========== */
 
-@media screen and (max-width: 800px){
-    .footer-social{ align-items: center; }
+@media screen and (max-width: 800px) {
+    .footer-social {
+        align-items: center;
+    }
 }
 
 /* ========== RESPONSIVE (MOBILE) ========== */
@@ -432,7 +588,8 @@
         padding: 40px 20px;
     }
 
-    .hero-text, .hero-image {
+    .hero-text,
+    .hero-image {
         width: 100%;
     }
 
@@ -440,18 +597,21 @@
     /* NAVIGATION MOBILE : menu plein écran (presque) avec fond transparent/blurry */
     nav ul {
         position: fixed;
-        top: 70px; /* en dessous du header sticky */
+        top: 70px;
+        /* en dessous du header sticky */
         left: 0;
         right: 0;
         bottom: 0;
         width: 100%;
-        background: rgba(10,10,35,0.25); /* très semi-transparent pour voir le fond */
+        background: rgba(10, 10, 35, 0.25);
+        /* très semi-transparent pour voir le fond */
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
         flex-direction: column;
         padding: 40px 20px;
         gap: 18px;
-        display: none; /* shown via .show */
+        display: none;
+        /* shown via .show */
         border-radius: 0;
         align-items: center;
         justify-content: center;
@@ -473,21 +633,27 @@
         display: flex;
     }
 }
-.foot-kit{
+
+.foot-kit {
     display: flex;
-    justify-content: flex-start; /* rapprocher les éléments au lieu de les espacer */
+    justify-content: flex-start;
+    /* rapprocher les éléments au lieu de les espacer */
     align-items: center;
-    gap: 20px; /* espace réduit entre image et bouton */
+    gap: 20px;
+    /* espace réduit entre image et bouton */
     max-width: 1000px;
     margin: 40px auto;
 }
-.kit-image{
+
+.kit-image {
     text-align: center;
     margin-top: 20px;
     width: auto;
-    max-width: 320px; /* limite la taille de l'image pour garder le bouton proche */
+    max-width: 320px;
+    /* limite la taille de l'image pour garder le bouton proche */
 }
-.kit-image img{
+
+.kit-image img {
     width: 100%;
     height: auto;
     display: block;
@@ -495,13 +661,14 @@
 }
 
 /* --- Styles carrousel kit --- */
-.kit-carousel{
+.kit-carousel {
     position: relative;
     overflow: hidden;
     width: 100%;
     border-radius: 16px;
 }
-.kit-carousel img{
+
+.kit-carousel img {
     width: 100%;
     display: inline-block;
     transition: transform 0.5s ease, opacity 0.5s ease;
@@ -510,22 +677,24 @@
     left: 0;
     top: 0;
 }
-.kit-carousel img.active{
+
+.kit-carousel img.active {
     opacity: 1;
     position: relative;
 }
 
 /* Afficher la première image si aucune n'a la classe "active" */
-.kit-carousel img:first-child{
+.kit-carousel img:first-child {
     opacity: 1;
     position: relative;
 }
 
-.kit-prev, .kit-next{
+.kit-prev,
+.kit-next {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(0,0,0,0.4);
+    background: rgba(0, 0, 0, 0.4);
     color: white;
     border: none;
     width: 36px;
@@ -536,28 +705,47 @@
     justify-content: center;
     cursor: pointer;
 }
-.kit-prev{ left: 8px; }
-.kit-next{ right: 8px; }
+
+.kit-prev {
+    left: 8px;
+}
+
+.kit-next {
+    right: 8px;
+}
 
 /* hide controls on very small screens if needed */
-@media screen and (max-width: 400px){
-    .kit-prev, .kit-next{ width: 28px; height: 28px; }
+@media screen and (max-width: 400px) {
+
+    .kit-prev,
+    .kit-next {
+        width: 28px;
+        height: 28px;
+    }
 }
+
 .btn-kit {
-    background: #0077ff;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
     color: white;
     padding: 12px 25px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
+    font-weight: 600;
     transition: 0.3s;
+    display: inline-block;
+    text-decoration: none;
 }
 
 .btn-kit:hover {
-    background: #005fcc;
+    filter: brightness(1.12);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 125, 0, 0.3);
 }
-.kit-right{
-    display: flex; /* pour centrer verticalement et rester proche de l'image */
+
+.kit-right {
+    display: flex;
+    /* pour centrer verticalement et rester proche de l'image */
     justify-content: center;
     align-items: center;
     margin-top: 20px;
