@@ -410,10 +410,65 @@
 /* ========== SPONSORS SECTION ========== */
 .sponsors-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 20px;
     max-width: 1000px;
     margin: 30px auto;
+}
+
+/* Carousel for >4 sponsors */
+.sponsors-carousel {
+    position: relative;
+    max-width: 1000px;
+    margin: 30px auto;
+    overflow: hidden;
+}
+
+.sponsors-track {
+    display: flex;
+    gap: 20px;
+    transition: transform 0.4s ease;
+    padding: 0 50px;
+}
+
+.sponsors-track .sponsor-card {
+    flex: 0 0 calc(25% - 15px);
+    min-width: 180px;
+    max-width: 220px;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff7d00, #ff4da6);
+    color: white;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 10;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.carousel-btn:hover {
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-prev { left: 5px; }
+.carousel-next { right: 5px; }
+
+@media screen and (max-width: 768px) {
+    .sponsors-track .sponsor-card {
+        flex: 0 0 calc(50% - 10px);
+        min-width: 140px;
+    }
+    
+    .sponsors-track {
+        padding: 0 45px;
+    }
 }
 
 .sponsor-card {

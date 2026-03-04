@@ -15,11 +15,18 @@
 <div class="payment-container">
     <div class="summary">
         <p>Montant à Payer :</p>
-        <p class="amount" id="amount-display"> XOF</p>
+        <p class="amount" id="amount-display">{{ total }} XOF</p>
         <!-- hidden field to store numeric total if needed -->
-        <input type="hidden" id="cart-total-hidden" name="cart-total-hidden" value="0">
+        <input type="hidden" id="cart-total-hidden" name="cart-total-hidden" value="{{ total }}">
         <!-- Liste détaillée du panier -->
-        <div id="cart-items" style="margin-top:12px;text-align:left"></div>
+        <div id="cart-items" style="margin-top:12px;text-align:left">
+            {% for item in panier_items %}
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.1);">
+                <span>{{ item.kit.name }} x{{ item.quantite }}</span>
+                <span>{% widthratio item.kit.price 1 item.quantite %} F</span>
+            </div>
+            {% endfor %}
+        </div>
 
         <!-- Formulaire POST : lieu de retrait + numéro -->
         <form method="post" action="{% url 'confirmer_achat' %}" id="payment-submission">

@@ -8,38 +8,33 @@
 
 {% block content %}
 
-
- 
-
 <section class="page-title">
-    <h1>Acheter Votre Kit</h1>
-    <p>Choisissez le kit qui vous convient pour Poro Run</p>
+    <h1>Nos Kits</h1>
+    <p>Choisissez vos packs pour Poro Run</p>
 </section>
-<div id="storage-warning" class="hidden" role="alert" aria-live="polite"
-    style="max-width:800px;margin:12px auto;padding:10px;border-radius:6px;background:#fff3cd;color:#856404;display:none">
-    Votre navigateur bloque le stockage local (localStorage). Le panier peut ne pas fonctionner correctement.</div>
+
 <div class="conteneur">
     {% if kits %}
         {% for k in kits %}
-        <div class="box product" data-name="{{ k.name }}" data-price="{{ k.price }}">
+        <div class="box product" data-name="{{ k.name }}" data-price="{{ k.price }}" data-id="{{ k.id }}">
             {% if k.image %}
-                <img src="{{ k.image.url }}" alt="{{ k.name }}" onerror="this.onerror=null;this.src='https://via.placeholder.com/360x240?text=Kit'">
+                <img src="{{ k.image.url }}" alt="{{ k.name }}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='https://via.placeholder.com/360x240?text=Kit'">
             {% else %}
-                <img src="https://via.placeholder.com/360x240?text=Kit" alt="{{ k.name }}">
+                <img src="https://via.placeholder.com/360x240?text=Kit" alt="{{ k.name }}" loading="lazy" decoding="async">
             {% endif %}
             <h2 class="product-title">{{ k.name }}</h2>
-            <p class="product-price">{{ k.price }} FCFA</p>
+            <p class="product-price">{{ k.price }}fcfa</p>
             <ul class="kit-features">
                 {% for item in k.avantages %}
                     <li>{{ item }}</li>
                 {% endfor %}
             </ul>
             <div class="quantity-row">
-                <button type="button" class="qty-btn" aria-label="Réduire quantité" onclick="changeQty('{{ k.name }}', -1)">−</button>
-                <input type="number" name="quantite_{{ k.id }}" id="quantite_{{ k.id }}" class="zone_text" value="1" min="0" data-item="{{ k.name }}">
-                <button type="button" class="qty-btn" aria-label="Augmenter quantité" onclick="changeQty('{{ k.name }}', 1)">+</button>
+                <button type="button" class="qty-btn" aria-label="Réduire quantité" onclick="ajouterQuantite('{{ k.id }}', -1)">−</button>
+                <input type="number" name="quantite_{{ k.id }}" id="quantite_{{ k.id }}" class="zone_text" value="1" min="0">
+                <button type="button" class="qty-btn" aria-label="Augmenter quantité" onclick="ajouterQuantite('{{ k.id }}', 1)">+</button>
             </div>
-            <button type="button" class="bouton" aria-label="Acheter {{ k.name }}" onclick="location.href='{% url 'confirmer_achat' %}'">ACHETER</button>
+            <button type="button" class="bouton btn-ajouter" data-id="{{ k.id }}" data-name="{{ k.name }}" data-price="{{ k.price }}">AJOUTER AU PANIER</button>
         </div>
         {% endfor %}
     {% else %}
@@ -47,16 +42,213 @@
     {% endif %}
 
 </div>
+
 <div class="box3 recap-below">
-    <h3>RECAPITULATIF</h3>
-    <div id="resume"></div>
+    <h3>MON PANIER</h3>
+    <div id="resume">
+        <p style="color: #9ca3af; text-align: center; padding: 20px;">Votre panier est vide</p>
+    </div>
     <h4 id="total"></h4>
     <div class="recap-actions">
-        <button class="bout" id="validerBtn" onclick="location.href='{% url 'confirmer_achat' %}'" aria-label="Valider les achats">VALIDER LES
-            ACHATS</button>
-        <button class="bout" id="viderPanierBtn" onclick="viderPanier()" aria-label="Vider le panier">VIDER LE
-            PANIER</button>
+        <button class="bout" id="validerBtn" onclick="validerPanier()">VALIDER LE PANIER</button>
+        <button class="bout" id="viderPanierBtn" onclick="viderPanier()">VIDER</button>
     </div>
 </div>
+
+<script>
+const CART_KEY = 'poro_cart';
+let panier = [];
+
+function getPanier() {
+    try {
+        const data = localStorage.getItem(CART_KEY);
+        return data ? JSON.parse(data) : [];
+    } catch(e) {
+        return [];
+    }
+}
+
+function savePanier() {
+    try {
+        localStorage.setItem(CART_KEY, JSON.stringify(panier));
+    } catch(e) {}
+}
+
+function getCSRF() {
+    let csrf = null;
+    const cookies = document.cookie.split(';');
+    for (let c of cookies) {
+        c = c.trim();
+        if (c.startsWith('csrftoken=')) {
+            csrf = c.substring(9);
+            break;
+        }
+    }
+    return csrf;
+}
+
+function ajouterQuantite(id, delta) {
+    const input = document.getElementById('quantite_' + id);
+    if (input) {
+        let val = parseInt(input.value) || 0;
+        val = Math.max(0, val + delta);
+        input.value = val;
+    }
+}
+
+function ajouterAuPanier(id, name, price) {
+    const input = document.getElementById('quantite_' + id);
+    let qty = input ? parseInt(input.value) || 1 : 1;
+    
+    if (qty <= 0) {
+        showToast('Veuillez sélectionner une quantité');
+        return;
+    }
+    
+    const existing = panier.find(item => item.id === id);
+    if (existing) {
+        existing.qty += qty;
+    } else {
+        panier.push({ id: id, name: name, price: parseInt(price), qty: qty });
+    }
+    
+    savePanier();
+    renderPanier();
+    syncDjango(id, qty);
+    
+    showToast(qty + ' x ' + name + ' ajouté(s)!');
+    input.value = 1;
+}
+
+function syncDjango(kitId, qty) {
+    fetch('/api/panier/ajouter/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRF()
+        },
+        body: JSON.stringify({ kit_id: kitId, quantity: qty })
+    }).catch(e => console.log('Erreur sync:', e));
+}
+
+function modifierQte(index, delta) {
+    panier[index].qty += delta;
+    if (panier[index].qty <= 0) {
+        panier.splice(index, 1);
+    }
+    savePanier();
+    renderPanier();
+    
+    const item = panier[index];
+    if (item) {
+        syncDjango(item.id, item.qty);
+    }
+}
+
+function supprimerItem(index) {
+    const item = panier[index];
+    panier.splice(index, 1);
+    savePanier();
+    renderPanier();
+    
+    fetch('/api/panier/update/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRF()
+        },
+        body: JSON.stringify({ kit_id: item.id, quantity: 0 })
+    });
+}
+
+function viderPanier() {
+    panier = [];
+    savePanier();
+    renderPanier();
+    
+    fetch('/api/panier/clear/', {
+        method: 'POST',
+        headers: { 'X-CSRFToken': getCSRF() }
+    });
+    
+    showToast('Panier vidé');
+}
+
+function validerPanier() {
+    if (panier.length === 0) {
+        showToast('Votre panier est vide!');
+        return;
+    }
+    window.location.href = '/kits/confirmer/';
+}
+
+function renderPanier() {
+    const resumeEl = document.getElementById('resume');
+    const totalEl = document.getElementById('total');
+    
+    if (!resumeEl || !totalEl) return;
+    
+    if (panier.length === 0) {
+        resumeEl.innerHTML = '<p style="color: #9ca3af; text-align: center; padding: 20px;">Votre panier est vide</p>';
+        totalEl.textContent = 'Total: 0fcfa';
+        return;
+    }
+    
+    let html = '';
+    let total = 0;
+    
+    panier.forEach((item, index) => {
+        const itemTotal = item.price * item.qty;
+        total += itemTotal;
+        html += `
+            <div class="resume-item">
+                <div class="resume-left">
+                    <strong>${item.name}</strong>
+                </div>
+                <div class="resume-controls">
+                    <button type="button" class="btn-small" onclick="modifierQte(${index}, -1)">−</button>
+                    <span style="padding: 0 10px;">${item.qty}</span>
+                    <button type="button" class="btn-small" onclick="modifierQte(${index}, 1)">+</button>
+                </div>
+                <div class="resume-right">
+                    ${itemTotal.toLocaleString()} F
+                </div>
+                <button type="button" class="btn-danger" style="margin-left: 8px; padding: 4px 8px;" onclick="supprimerItem(${index})">×</button>
+            </div>
+        `;
+    });
+    
+    resumeEl.innerHTML = html;
+    totalEl.textContent = 'Total: ' + total.toLocaleString() + 'fcfa';
+}
+
+function showToast(msg) {
+    let toast = document.querySelector('.toast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.style.cssText = 'position:fixed;right:20px;bottom:20px;background:linear-gradient(135deg,#ff7d00,#ff4da6);color:#fff;padding:14px 24px;border-radius:10px;font-weight:600;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,0.3);';
+        document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.style.display = 'block';
+    setTimeout(() => toast.style.display = 'none', 2500);
+}
+
+// Init
+document.addEventListener('DOMContentLoaded', function() {
+    panier = getPanier();
+    renderPanier();
+    
+    document.querySelectorAll('.btn-ajouter').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.dataset.id;
+            const name = this.dataset.name;
+            const price = this.dataset.price;
+            ajouterAuPanier(id, name, price);
+        });
+    });
+});
+</script>
 
 {% endblock content %}

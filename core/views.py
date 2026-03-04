@@ -1,6 +1,18 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.cache import cache_page
-from .models import Partenaire, Kit, Activite, Commande, Edition, LieuRetrait
+from django.http import JsonResponse
+from .models import Partenaire, Kit, Activite, Commande, Edition, LieuRetrait, Panier, PanierItem
+
+
+def init_lieux_retrait():
+    DEFAULT_LIEUX = [
+        'Korhogo Centre - Place de la Paix', 'Korhogo - Quartier Sinistré', 'Korhogo - Soba',
+        'Korhogo - DEM', 'Korhogo - Haoussabougou', 'Korhogo - Cocody',
+        'Ferkessédougou - Centre ville', 'Boundiali - Centre ville'
+    ]
+    if not LieuRetrait.objects.exists():
+        for name in DEFAULT_LIEUX:
+            LieuRetrait.objects.get_or_create(name=name)
 
 
 def get_active_edition():
@@ -23,6 +35,7 @@ def home(request):
     })
 
 
+@cache_page(60 * 10)
 def kit_view(request):
     edition = get_active_edition()
     kits = edition.kit.all() if edition else []
@@ -31,16 +44,17 @@ def kit_view(request):
 
 def confirmer_achat(request):
     edition = get_active_edition()
-    DEFAULT_LIEUX = [
-        'Korhogo Centre - Place de la Paix', 'Korhogo - Quartier Sinistré', 'Korhogo - Soba',
-        'Korhogo - DEM', 'Korhogo - Haoussabougou', 'Korhogo - Cocody',
-        'Ferkessédougou - Centre ville', 'Boundiali - Centre ville'
-    ]
+    init_lieux_retrait()
     lieux = LieuRetrait.objects.all()
-    if not lieux.exists():
-        for name in DEFAULT_LIEUX:
-            LieuRetrait.objects.create(name=name)
-        lieux = LieuRetrait.objects.all()
+    
+    # Get cart items from Django
+    try:
+        panier = get_or_create_panier(request)
+        panier_items = panier.items.select_related('kit').all()
+    except:
+        panier_items = []
+    
+    total = sum(item.kit.price * item.quantite for item in panier_items)
 
     if request.method == 'POST':
         numero = request.POST.get('phone-number') or request.POST.get('numero') or ''
@@ -51,15 +65,102 @@ def confirmer_achat(request):
                 lieu = LieuRetrait.objects.get(pk=lieu_id)
             except LieuRetrait.DoesNotExist:
                 lieu = None
-        Commande.objects.create(numero=numero, lieuRetrait=lieu)
+        
+        # Create order with all items
+        commande = Commande.objects.create(numero=numero, lieuRetrait=lieu)
+        
+        # Clear cart after order
+        panier.items.all().delete()
+        
         return redirect('recap')
 
     return render(request, 'partials/achat/confirmer_achat.html', {
         'edition': edition,
         'lieux': lieux,
+        'panier_items': panier_items,
+        'total': total,
     })
 
 
 def recap(request):
     return render(request, 'partials/message/recapt.html')
+
+
+def get_or_create_panier(request):
+    session_key = request.session.session_key
+    if not session_key:
+        request.session.create()
+        session_key = request.session.session_key
+    
+    panier, created = Panier.objects.get_or_create(session_key=session_key)
+    return panier
+
+
+def ajouter_au_panier(request):
+    if request.method == 'POST':
+        import json
+        data = json.loads(request.body)
+        kit_id = data.get('kit_id')
+        quantity = int(data.get('quantity', 1))
+        
+        panier = get_or_create_panier(request)
+        kit = get_object_or_404(Kit, pk=kit_id)
+        
+        item, created = PanierItem.objects.get_or_create(
+            panier=panier,
+            kit=kit,
+            defaults={'quantite': quantity}
+        )
+        
+        if not created:
+            item.quantite += quantity
+            item.save()
+        
+        count = sum(i.quantite for i in panier.items.all())
+        
+        return JsonResponse({'success': True, 'cart_count': count})
+    
+    return JsonResponse({'success': False})
+
+
+def get_panier_count(request):
+    try:
+        panier = get_or_create_panier(request)
+        count = sum(i.quantite for i in panier.items.all())
+    except:
+        count = 0
+    return JsonResponse({'count': count})
+
+
+def mise_a_jour_panier(request):
+    if request.method == 'POST':
+        import json
+        data = json.loads(request.body)
+        kit_id = data.get('kit_id')
+        quantity = int(data.get('quantity', 0))
+        
+        panier = get_or_create_panier(request)
+        
+        if quantity <= 0:
+            PanierItem.objects.filter(panier=panier, kit_id=kit_id).delete()
+        else:
+            item = PanierItem.objects.filter(panier=panier, kit_id=kit_id).first()
+            if item:
+                item.quantite = quantity
+                item.save()
+        
+        count = sum(i.quantite for i in panier.items.all())
+        
+        return JsonResponse({'success': True, 'cart_count': count})
+    
+    return JsonResponse({'success': False})
+
+
+def vider_panier(request):
+    try:
+        panier = get_or_create_panier(request)
+        panier.items.all().delete()
+    except:
+        pass
+    return JsonResponse({'success': True})
 

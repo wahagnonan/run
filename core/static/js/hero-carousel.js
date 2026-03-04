@@ -57,4 +57,48 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const kit = document.getElementById('kit-carousel');
     if (kit) initCarousel(kit, { interval: 4500 });
+
+    // Sponsors carousel
+    const sponsorsCarousel = document.querySelector('.sponsors-carousel');
+    if (sponsorsCarousel) {
+        const track = sponsorsCarousel.querySelector('.sponsors-track');
+        const cards = Array.from(track.querySelectorAll('.sponsor-card'));
+        const prevBtn = sponsorsCarousel.querySelector('.carousel-prev');
+        const nextBtn = sponsorsCarousel.querySelector('.carousel-next');
+        
+        if (cards.length <= 4) return;
+        
+        let currentIndex = 0;
+        const visibleCards = window.innerWidth <= 768 ? 2 : 4;
+        const maxIndex = cards.length - visibleCards;
+        
+        function updateCarousel() {
+            const offset = currentIndex * (100 / visibleCards);
+            track.style.transform = `translateX(-${offset}%)`;
+        }
+        
+        prevBtn.addEventListener('click', function() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateCarousel();
+            }
+        });
+        
+        nextBtn.addEventListener('click', function() {
+            if (currentIndex < maxIndex) {
+                currentIndex++;
+                updateCarousel();
+            }
+        });
+        
+        // Auto-scroll every 4 seconds
+        setInterval(function() {
+            if (currentIndex < maxIndex) {
+                currentIndex++;
+            } else {
+                currentIndex = 0;
+            }
+            updateCarousel();
+        }, 4000);
+    }
 });

@@ -58,23 +58,23 @@ Page d'accueil - Poro Run
             <h2>Découvrez l'ambiance</h2>
             <div class="atouts">
                 <div class="atout-image">
-                    <img src="{% static 'Images/2.jpg' %}" alt="Image" loading="lazy">
+                    <img src="{% static 'Images/2.jpg' %}" alt="Image" loading="lazy" decoding="async">
                 </div>
                 <div class="atout-image">
-                    <img src="{% static 'Images/3.jpg' %}" alt="Image" loading="lazy">
+                    <img src="{% static 'Images/3.jpg' %}" alt="Image" loading="lazy" decoding="async">
                 </div>
                 <div class="atout-image">
-                    <img src="{% static 'Images/4.jpg' %}" alt="Image" loading="lazy">
+                    <img src="{% static 'Images/4.jpg' %}" alt="Image" loading="lazy" decoding="async">
                 </div>
-            </div>  
+            </div>
         </section>
 
         <section class="foot-kit">
             <!-- Carrousel d'images pour les kits -->
                 <div class="kit-image">
                 <div class="kit-carousel" id="kit-carousel">
-                    <img src="{% static 'Images/kit 1.jpg' %}" alt="kits poro">
-                    <img src="{% static 'Images/kit 2.jpg' %}" alt="kits poro">
+                    <img src="{% static 'Images/kit 1.jpg' %}" alt="kits poro" loading="lazy" decoding="async">
+                    <img src="{% static 'Images/kit 2.jpg' %}" alt="kits poro" loading="lazy" decoding="async">
                 </div>
                 <!-- Contrôles si besoin -->
                 <button class="kit-prev" aria-label="Image précédente">‹</button>
@@ -98,7 +98,16 @@ Page d'accueil - Poro Run
             <p class="event-hours"><strong>Horaires :</strong> 08:00 — 22:00</p>
         </div>
         <div class="map-container">
-            <iframe src="https://www.google.com/maps?q=9.4647,-5.6319&z=15&output=embed" aria-label="Carte du lieu du festival" loading="lazy"></iframe>
+            <iframe 
+                src="https://www.google.com/maps?q=9.4647,-5.6319&z=15&output=embed" 
+                aria-label="Carte du lieu du festival" 
+                loading="lazy"
+                width="100%" 
+                height="400"
+                style="border:0;"
+                allowfullscreen=""
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
         </div>
         <div class="map-actions">
             <button id="open-directions" class="btn-buy">Itinéraire (Google Maps)</button>
@@ -110,22 +119,44 @@ Page d'accueil - Poro Run
     <section id="sponsors" class="section dark">
         <h2>Nos Partenaires</h2>
         <p class="subtitle">Merci à nos sponsors qui rendent Poro Run possible.</p>
+        
+        {% if partenaire|length > 4 %}
+        <div class="sponsors-carousel">
+            <button class="carousel-btn carousel-prev" aria-label="Précédent">‹</button>
+            <div class="sponsors-track">
+                {% for part in partenaire %}
+                <div class="sponsor-card">
+                    <div class="logo-Partenare">
+                    {% if part.logo %}
+                        <img class="sponsor-logo" src="{{ part.logo.url }}" alt="{{ part.name }} logo">
+                    {% else %}
+                        <span class="logo-placeholder">{{ part.name }}</span>
+                    {% endif %}
+                    </div>
+                    <div class="sponsor-name">{{ part.name }}</div>
+                    <p class="sponsor-level">{{ part.level }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            <button class="carousel-btn carousel-next" aria-label="Suivant">›</button>
+        </div>
+        {% else %}
         <div class="sponsors-grid">
-        {% for part in partenaire %}
+            {% for part in partenaire %}
             <div class="sponsor-card">
-                 <!-- logo centré et adaptatif -->
-                 <div class="logo-Partenare">
-                 {% if part.logo %}
-                     <img class="sponsor-logo" src="{{ part.logo.url }}" alt="{{ part.name }} logo">
-                 {% else %}
-                     <span class="logo-placeholder">{{ part.name }}</span>
-                 {% endif %}
-                 </div>
+                <div class="logo-Partenare">
+                {% if part.logo %}
+                    <img class="sponsor-logo" src="{{ part.logo.url }}" alt="{{ part.name }} logo">
+                {% else %}
+                    <span class="logo-placeholder">{{ part.name }}</span>
+                {% endif %}
+                </div>
                 <div class="sponsor-name">{{ part.name }}</div>
                 <p class="sponsor-level">{{ part.level }}</p>
             </div>
              {% endfor %}
         </div>
+        {% endif %}
     </section>
 {% endblock %}
 <!-- Carousel script -->

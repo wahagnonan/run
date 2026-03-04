@@ -105,6 +105,23 @@ class LieuRetrait(models.Model):
         return self.name
 
 
+class Panier(models.Model):
+    session_key = models.CharField(max_length=100, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Panier {self.session_key}"
+
+
+class PanierItem(models.Model):
+    panier = models.ForeignKey(Panier, on_delete=models.CASCADE, related_name='items')
+    kit = models.ForeignKey(Kit, on_delete=models.CASCADE)
+    quantite = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.kit.name} x{self.quantite}"
+
+
 
 
 
